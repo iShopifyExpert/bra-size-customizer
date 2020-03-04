@@ -269,16 +269,16 @@
       <div class="fields-set">
         {% paginate collections['straps'].products by 1000 %}
         {% for product in collections['straps'].products %}
-        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega' %} cup-size-container">
+        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega' %} straps-size-container">
           <a href="#" class=""><img class="cup-size" src="{{product.featured_image | img_url: '700x700'}}" alt="{{product.title | escape}}"></a>
           <div class="overlay">
             <div class="text">
               <span class="product-title">{{product.title}}</span>
               <span class="product-price">{{product.price | money}}</span>
               <select name="disabled" class="variant-straps-size" id="variant-{% increment variantcount %}"{% if product.options.size < 2 %} style="display:none;"{% endif %}>{% for variant in product.variants %}
-                <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %}{% unless variant.available %} disabled="disabled"{% endunless %} value="{{ variant.id }}" data-sku="{{ variant.sku }}">{{ variant.title }} - {% if variant.available %}{{ variant.price | money_with_currency }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
+                <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{ variant.id }}">{{ variant.title }}{% if variant.available %}{% else %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
               </select>
-              <input type="hidden" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
+              <input type="hidden" name="quantity-straps-size" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
             </div>
           </div>
         </div>
@@ -310,9 +310,9 @@
               <span class="product-title">{{product.title}}</span>
               <span class="product-price">{{product.price | money}}</span>
               <select name="disabled" class="variant-backs-size" id="variant-{% increment variantcount %}"{% if product.options.size < 2 %} style="display:none;"{% endif %}>{% for variant in product.variants %}
-                <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %}{% unless variant.available %} disabled="disabled"{% endunless %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{variant.id}}" data-backssize="{{variant.title | split: ' / ' | first}}">{{ variant.title }} - {% if variant.available %}{{ variant.price | money_with_currency }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
+                <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{variant.id}}" data-backssize="{{variant.title | split: ' / ' | first}}">{{ variant.title }}{% if variant.available %}{% else %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
               </select>
-              <input type="hidden" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
+              <input type="hidden" name="quantity-backs-size" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
             </div>
           </div>
         </div>
@@ -508,10 +508,10 @@ select:hover, select:focus {
   width: 100%;
   height: auto;
 }
-.cup-size-container:hover .overlay, .backs-size-container:hover .overlay {
+.cup-size-container:hover .overlay, .backs-size-container:hover .overlay, .straps-size-container:hover .overlay {
   opacity: 1;
 }
-.cup-size-container, .backs-size-container {
+.cup-size-container, .backs-size-container, .straps-size-container {
   position: relative;
   width: 50%;
 }
@@ -685,6 +685,9 @@ a.disable {
     left: 0;
     right: 0;
 }
+.selected-border {
+    outline: 3px solid #fd95d3;
+}
 @media (min-width: 741px) {
   .fields-set {
     display: inline-block;/*inline-flex;*/
@@ -796,7 +799,7 @@ a.disable {
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
   }
-  .cup-size-container a, .backs-size-container a {
+  .cup-size-container a, .backs-size-container a, .straps-size-container a {
     display: inline-block;
     padding: 5px 15px;
   }
@@ -877,9 +880,26 @@ a.disable {
           }
         });
      });
-  });
-  
-  $("#setp-addtocart").click(function(e) {
+   });
+   $('.cup-size-container:not(.disabled)').click(function(e){
+     $('.cup-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-cup-size]').val('0');
+     $(this).addClass('selected-border').find('input[name=quantity-cup-size]').val('1');
+     return false;
+   });
+   
+   $('.straps-size-container:not(.disabled)').click(function(e){
+     $('.straps-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-straps-size]').val('0');
+     $(this).addClass('selected-border').find('input[name=quantity-straps-size]').val('1');
+     return false;
+   });
+   
+   $('.backs-size-container:not(.disabled)').click(function(e){
+     $('.backs-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-backs-size]').val('0');
+     $(this).addClass('selected-border').find('input[name=quantity-backs-size]').val('1');
+     return false;
+   });
+   
+   $("#setp-addtocart").click(function(e) {
     e.preventDefault();
     var productlist = new Array();
     var qty ;
@@ -981,7 +1001,7 @@ a.disable {
     
     $('.section').removeClass('activate').hide();
     $(this).parents('.section').next('.section').addClass('activate').show();
-  });
+   });
  });
 </script>
 {% schema %}
