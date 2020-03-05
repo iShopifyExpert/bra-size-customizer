@@ -226,7 +226,7 @@
         {% assign variantcount = 1 %}{% assign quantitycount = 1 %}
         {% paginate collections['cups'].products by 1000 %}
         {% for product in collections['cups'].products %}
-        <div class="one-third column {% cycle 'alpha', '', 'omega' %} cup-size-container" data-color="{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{{value}}{% endfor %}{% endif %}{% endfor %}">
+        <div class="one-third column {% cycle 'alpha', '', 'omega' %} cup-size-container{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{% assign selectcolor = value | remove: 'Manhattan ' | remove: 'Abu Dhabi '%}{% if selectcolor != 'Black' %} disabled{% endif %}{% endfor %}{% endif %}{% endfor %}" data-color="{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{{value | remove: 'Manhattan ' | remove: 'Abu Dhabi '}}{% endfor %}{% endif %}{% endfor %}">
           <a href="#" class=""><img class="cup-size" src="{{product.featured_image | img_url: '700x700'}}" alt="{{product.title | escape}}"></a>
           <div class="stock" style="display: none;">Out of Stock</div>
           <div class="overlay">
@@ -248,9 +248,11 @@
         <div class="section-space-30"></div>
         <p class="section-title">... and color.</p>
       </div>
-      <div class="fields-set second-row center"> 
-        <a class="color-selector black" href="#"> </a>
-      	<a class="color-selector skin" href="#"></a>
+      <div class="fields-set second-row center">
+        <div class="color-content flex" id="selectcolor">
+          <a href="#" class="color-selector black selected-border" data-color="Black"></a>
+      	  <a href="#" class="color-selector skin" data-color="Beige"></a>
+        </div>
       </div>
       <div class="content-center">
         <a href="#" class="btn button next-section" id="setp-2">Next</a>
@@ -269,7 +271,7 @@
       <div class="fields-set">
         {% paginate collections['straps'].products by 1000 %}
         {% for product in collections['straps'].products %}
-        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega' %} straps-size-container">
+        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega' %} straps-size-container{% for tag in product.tags %}{% if tag != 'Black' %} disabled{% endif %}{% endfor %}" data-color="{% for tag in product.tags %}{% if tag == 'Black' or tag == 'Beige' %}{{tag}}{% endif %}{% endfor %}">
           <a href="#" class=""><img class="cup-size" src="{{product.featured_image | img_url: '700x700'}}" alt="{{product.title | escape}}"></a>
           <div class="overlay">
             <div class="text">
@@ -303,7 +305,7 @@
       <div class="fields-set">
         {% paginate collections['backs'].products by 1000 %}
         {% for product in collections['backs'].products %}
-        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega', 'alpha', '', 'omega' %} backs-size-container" data-color="{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{{value}}{% endfor %}{% endif %}{% endfor %}">
+        <div class="one-third column {% cycle 'alpha', '', 'omega', 'alpha', '', 'omega', 'alpha', '', 'omega' %} backs-size-container{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{% if value != 'Black' %} disabled{% endif %}{% endfor %}{% endif %}{% endfor %}" data-color="{% for product_option in product.options_with_values %}{% if product_option.name == 'Color' %}{% for value in product_option.values %}{{value}}{% endfor %}{% endif %}{% endfor %}">
           <a href="#" class=""><img class="cup-size" src="{{product.featured_image | img_url: '700x700'}}" alt="{{product.title | escape}}"></a>
           <div class="overlay">
             <div class="text">
@@ -684,9 +686,17 @@ a.disable {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1;
+}
+.selected-outline {
+    outline: 3px solid #fd95d3;
 }
 .selected-border {
-    outline: 3px solid #fd95d3;
+    border-color: #fd95d3 !important;
+}
+.cup-size-container.disabled .overlay, .straps-size-container.disabled .overlay, .backs-size-container.disabled .overlay {
+    opacity: 1;
+    background: #fd95d3;
 }
 @media (min-width: 741px) {
   .fields-set {
@@ -820,7 +830,7 @@ a.disable {
 <script type="text/javascript">
   
  $(document).ready(function() {
-   $('.next-section').click(function(e){
+   $(document).on('click', '.next-section', function(e) {
      $('.section').removeClass('activate').hide();
      if($(this).parents('.section').next('.section').length > 0) {
        $(this).parents('.section').next('.section').addClass('activate').show();
@@ -831,10 +841,10 @@ a.disable {
        });
      } return false;
    });
-   $('#newsletter-link').click(function(e){
+   $(document).on('click', '#newsletter-link', function(e) {
      $('#section-newsletter').show();
    });
-   $('.newsletter-close').click(function(e){
+   $(document).on('click', '.newsletter-close', function(e) {
      $('#section-newsletter').hide();
    });
    $('#bra-size').on('change', function(){
@@ -854,14 +864,12 @@ a.disable {
      var valvariantcupsize = $(this).find(':selected').attr('data-cupsize');
      var variantcupsize = $('.variant-cup-size');
      $('option', variantcupsize).filter(function(){
-        if ($(this).attr('data-cupsize') === valvariantcupsize) { if ($(this).parent('span').length) { $(this).unwrap().attr('selected', true); } } else { if (!$(this).parent('span').length) { $(this).attr('selected', false).wrap( "<span>" ).parent().hide(); } }
+        if ($(this).attr('data-cupsize') === valvariantcupsize) { if ($(this).parent('span').length) { $(this).attr('selected', true).unwrap(); } } else { if (!$(this).parent('span').length) { $(this).attr('selected', false).wrap( "<span>" ).parent().hide(); } }
         //$('.variant-cup-size').trigger('change');
         $('.variant-cup-size').each(function(index) {
           var stock1 = $(this).find(':selected').trigger('change').attr('data-stock');
           if (stock1 === 'false') {
-            $(this).parents('.cup-size-container').addClass('disabled').find('.stock').show();
-          } else {
-            $(this).parents('.cup-size-container').removeClass('disabled').find('.stock').hide();
+            $(this).parents('.cup-size-container').addClass('disabled outofstock').find('.stock').show();
           }
         });
      });
@@ -869,37 +877,42 @@ a.disable {
      var valvariantbackssize = $(this).find(':selected').attr('data-backssize');
      var variantbackssize = $('.variant-backs-size');
      $('option', variantbackssize).filter(function(){
-        if ($(this).attr('data-backssize') === valvariantbackssize) { if ($(this).parent('span').length) { $(this).unwrap().attr('selected', true); } } else { if (!$(this).parent('span').length) { $(this).attr('selected', false).wrap( "<span>" ).parent().hide(); } }
+        if ($(this).attr('data-backssize') === valvariantbackssize) { if ($(this).parent('span').length) { $(this).attr('selected', true).unwrap(); } } else { if (!$(this).parent('span').length) { $(this).attr('selected', false).wrap( "<span>" ).parent().hide(); } }
         //$('.variant-cup-size').trigger('change');
         $('.variant-backs-size').each(function(index) {
           var stock2 = $(this).find(':selected').trigger('change').attr('data-stock');
           if (stock2 === 'false') {
-            $(this).parents('.backs-size-container').addClass('disabled').find('.stock').show();
-          } else {
-            $(this).parents('.backs-size-container').removeClass('disabled').find('.stock').hide();
+            $(this).parents('.backs-size-container').addClass('disabled outofstock').find('.stock').show();
           }
         });
      });
    });
-   $('.cup-size-container:not(.disabled)').click(function(e){
-     $('.cup-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-cup-size]').val('0');
-     $(this).addClass('selected-border').find('input[name=quantity-cup-size]').val('1');
+   $(document).on('click', '.cup-size-container:not(.disabled)', function(e) {
+     $('.cup-size-container:not(.disabled)').removeClass('selected-outline').find('input[name=quantity-cup-size]').val('0');
+     $(this).addClass('selected-outline').find('input[name=quantity-cup-size]').val('1');
      return false;
    });
-   
-   $('.straps-size-container:not(.disabled)').click(function(e){
-     $('.straps-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-straps-size]').val('0');
-     $(this).addClass('selected-border').find('input[name=quantity-straps-size]').val('1');
+   $('.cup-size-container:not(.outofstock), .straps-size-container:not(.outofstock), .backs-size-container:not(.outofstock)').addClass('disabled');
+   $('.cup-size-container[data-color=Black]:not(.outofstock), .straps-size-container[data-color=Black]:not(.outofstock), .backs-size-container[data-color=Black]:not(.outofstock)').removeClass('disabled');
+   $(document).on('click', '#selectcolor a', function(e) {
+     $('#selectcolor a').removeClass('selected-border');
+     $('.cup-size-container:not(.outofstock), .straps-size-container:not(.outofstock), .backs-size-container:not(.outofstock)').addClass('disabled').removeClass('selected-outline').find('input[name=quantity-cup-size], input[name=quantity-straps-size], input[name=quantity-backs-size]').val('0');
+     var selectcolor = $(this).attr('data-color');
+     $('.cup-size-container[data-color='+selectcolor+']:not(.outofstock), .straps-size-container[data-color='+selectcolor+']:not(.outofstock), .backs-size-container[data-color='+selectcolor+']:not(.outofstock)').removeClass('disabled');
+     $(this).addClass('selected-border');
      return false;
    });
-   
-   $('.backs-size-container:not(.disabled)').click(function(e){
-     $('.backs-size-container:not(.disabled)').removeClass('selected-border').find('input[name=quantity-backs-size]').val('0');
-     $(this).addClass('selected-border').find('input[name=quantity-backs-size]').val('1');
+   $(document).on('click', '.straps-size-container:not(.disabled)', function(e) {
+     $('.straps-size-container:not(.disabled)').removeClass('selected-outline').find('input[name=quantity-straps-size]').val('0');
+     $(this).addClass('selected-outline').find('input[name=quantity-straps-size]').val('1');
      return false;
    });
-   
-   $("#setp-addtocart").click(function(e) {
+   $(document).on('click', '.backs-size-container:not(.disabled)', function(e) {
+     $('.backs-size-container:not(.disabled)').removeClass('selected-outline').find('input[name=quantity-backs-size]').val('0');
+     $(this).addClass('selected-outline').find('input[name=quantity-backs-size]').val('1');
+     return false;
+   });
+   $(document).on('click', '#setp-addtocart', function(e) {
     e.preventDefault();
     var productlist = new Array();
     var qty ;
@@ -908,6 +921,7 @@ a.disable {
         variant_id: $("#variant-"+i).val(), quantity_id: $("#quantity-"+i).val() || 0
       });
     }
+    console.log(i)
     function ajaxProduct(){
       if (productlist.length) {
         var request = productlist.shift();
@@ -918,18 +932,17 @@ a.disable {
           url: '/cart/add.js',
           data: 'quantity='+tempQty+'&id='+tempId,
           dataType: 'json',
-          success: function(data) { ajaxProduct();
-           $.getJSON("/cart.js", function(cart) {
-             refreshCart(cart);
-             window.setTimeout(function(){ $.fancybox.close(); $('.cart-button').click(); }, 500);
-           });
-          },
+          success: function(data) { ajaxProduct(); console.log(tempId) },
           error: function() { ajaxProduct(); }
         };
         $.ajax(params);
       }
       else {
         //document.location.href = '/cart';
+        $.getJSON("/cart.js", function(cart) {
+          refreshCart(cart);
+          window.setTimeout(function(){ $.fancybox.close(); $('.cart-button').click(); }, 500);
+        });
       }
     };
     ajaxProduct();
