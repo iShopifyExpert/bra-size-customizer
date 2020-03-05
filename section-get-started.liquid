@@ -236,7 +236,7 @@
               <select name="disabled" class="variant-cup-size" id="variant-{% increment variantcount %}"{% if product.options.size < 2 %} style="display:none;"{% endif %}>{% for variant in product.variants %}
                 <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{variant.id}}" data-cupsize="{{variant.title | split: ' / ' | first}}">{{variant.title}}{% if variant.available %}{% else %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
               </select>
-              <input type="hidden" name="quantity-cup-size" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
+              <input type="hidden" name="quantity-cup-size" class="quantity" id="quantity-{% increment quantitycount %}" min="0" value="0" max="1" />
             </div>
           </div>
         </div>
@@ -280,7 +280,7 @@
               <select name="disabled" class="variant-straps-size" id="variant-{% increment variantcount %}"{% if product.options.size < 2 %} style="display:none;"{% endif %}>{% for variant in product.variants %}
                 <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{ variant.id }}">{{ variant.title }}{% if variant.available %}{% else %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
               </select>
-              <input type="hidden" name="quantity-straps-size" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
+              <input type="hidden" name="quantity-straps-size" class="quantity" id="quantity-{% increment quantitycount %}" min="0" value="0" max="1" />
             </div>
           </div>
         </div>
@@ -314,7 +314,7 @@
               <select name="disabled" class="variant-backs-size" id="variant-{% increment variantcount %}"{% if product.options.size < 2 %} style="display:none;"{% endif %}>{% for variant in product.variants %}
                 <option{% if variant == product.selected_or_first_available_variant %} selected="selected"{% endif %} data-stock="{% if variant.available %}true{% else %}false{% endif %}" value="{{variant.id}}" data-backssize="{{variant.title | split: ' / ' | first}}">{{ variant.title }}{% if variant.available %}{% else %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>{% endfor %}
               </select>
-              <input type="hidden" name="quantity-backs-size" id="quantity-{% increment quantitycount %}" tabindex="1" value="0" max="1" />
+              <input type="hidden" name="quantity-backs-size" class="quantity" id="quantity-{% increment quantitycount %}" min="0" value="0" max="1" />
             </div>
           </div>
         </div>
@@ -912,6 +912,8 @@ a.disable {
      $(this).addClass('selected-outline').find('input[name=quantity-backs-size]').val('1');
      return false;
    });
+   var length = $('.quantity').length
+   //console.log(total);
    $(document).on('click', '#setp-addtocart', function(e) {
     e.preventDefault();
     var productlist = new Array();
