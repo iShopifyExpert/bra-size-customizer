@@ -446,10 +446,10 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
      var variantcupsize = $('.variant-cup-size');
      $('option', variantcupsize).filter(function(){
         if ($(this).attr('data-cupsize') === valvariantcupsize) { $(this).attr("disabled", false).attr('selected', true); } else { $(this).attr('selected', false).attr("disabled", true); }
-        $('.variant-cup-size').each(function(index, element) {
-          var addClass1 = true, options = element.options;
-          for (i = 0; i < options.length; i++) {
-            var selected1 = options[i].disabled
+        $('.variant-cup-size').each(function(index1, element1) {
+          var addClass1 = true, options1 = element1.options;
+          for (i = 0; i < options1.length; i++) {
+            var selected1 = options1[i].disabled
             if(selected1 == false){ addClass1 = false; break; }
           }
           var stock1 = $(this).find(':selected').trigger('change').attr('data-stock');
@@ -459,14 +459,16 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
         });
      });
      
+     if ($('.cup-size-container:not(.disabled)').length > 0) { var addClass11 = true; } else { var addClass11 = false; }
+     if (addClass11 = true) { $('.cup-size-container').parents('.container-set').hide().next().show(); }
      var valvariantbackssize = $(this).find(':selected').attr('data-backssize');
      var variantbackssize = $('.variant-backs-size');
      $('option', variantbackssize).filter(function(){
         if ($(this).attr('data-backssize') === valvariantbackssize) { $(this).attr("disabled", false).attr('selected', true); } else { $(this).attr('selected', false).attr("disabled", true); }
-        $('.variant-backs-size').each(function(index, element) {
-          var addClass2 = true, options = element.options;
-          for (i = 0; i < options.length; i++) {
-            var selected2 = options[i].disabled
+        $('.variant-backs-size').each(function(index2, element2) {
+          var addClass2 = true, options2 = element2.options;
+          for (k = 0; k < options2.length; k++) {
+            var selected2 = options2[k].disabled
             if(selected2 == false){ addClass2 = false; break; }
           }
           var stock2 = $(this).find(':selected').trigger('change').attr('data-stock');
