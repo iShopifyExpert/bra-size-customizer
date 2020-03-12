@@ -282,12 +282,12 @@
      <div class="container-set" style="display:none;">
        <div class="one-full column notfound-container">
           <div class="section-space"></div>
-          <p class="main-title notfound">
-            <span class="pink">O</span>
+          <p class="main-title">
+            <span class="pink">0</span>
             <span class="red">h</span>
-            <span class="blue"> </span>
+            <span class="blue">&nbsp;</span>
             <span class="blue">n</span>
-            <span class="pink">o</span>
+            <span class="pink">0</span>
             <span class="green">!</span>
           </p>
           <p class="bold top">we are working on expending our sizing. feel free to let us know,<br>what size you are looking for, send us an email at<br><a href="mailto:shop@thebralab.com" class="red">shop@thebralab.com</a></p>
@@ -415,11 +415,6 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
      $('.section').removeClass('activate').hide();
      if($(this).parents('.section').next('.section').length > 0) {
        $(this).parents('.section').next('.section').addClass('activate').show();
-       $('.coffee-club-form #question1').each(function(){
-         $('.question a[href*="#"]').click(function(e){
-
-         });
-       });
      } return false;
    });
    $(document).on('click', '#newsletter-link', function(e) {
@@ -449,7 +444,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
         $('.variant-cup-size').each(function(index1, element1) {
           var addClass1 = true, options1 = element1.options;
           for (i = 0; i < options1.length; i++) {
-            var selected1 = options1[i].disabled
+            var selected1 = options1[i].disabled;
             if(selected1 === false){ addClass1 = false; break; }
           }
           var stock1 = $(this).find(':selected').trigger('change').attr('data-stock');
@@ -469,7 +464,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
         $('.variant-backs-size').each(function(index2, element2) {
           var addClass2 = true, options2 = element2.options;
           for (k = 0; k < options2.length; k++) {
-            var selected2 = options2[k].disabled
+            var selected2 = options2[k].disabled;
             if(selected2 === false){ addClass2 = false; break; }
           }
           var stock2 = $(this).find(':selected').trigger('change').attr('data-stock');
