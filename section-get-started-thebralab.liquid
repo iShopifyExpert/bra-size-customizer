@@ -450,7 +450,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
           var addClass1 = true, options1 = element1.options;
           for (i = 0; i < options1.length; i++) {
             var selected1 = options1[i].disabled
-            if(selected1 == false){ addClass1 = false; break; }
+            if(selected1 === false){ addClass1 = false; break; }
           }
           var stock1 = $(this).find(':selected').trigger('change').attr('data-stock');
           if ((stock1 === 'false') || (addClass1)) {
@@ -470,7 +470,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
           var addClass2 = true, options2 = element2.options;
           for (k = 0; k < options2.length; k++) {
             var selected2 = options2[k].disabled
-            if(selected2 == false){ addClass2 = false; break; }
+            if(selected2 === false){ addClass2 = false; break; }
           }
           var stock2 = $(this).find(':selected').trigger('change').attr('data-stock');
           if ((stock2 === 'false') || (addClass2)) {
