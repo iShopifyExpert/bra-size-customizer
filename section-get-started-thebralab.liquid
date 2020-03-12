@@ -394,7 +394,7 @@
           <a href="/collections/all" class="btn button next-section cont">Keep Shopping</a>
         </div>
         <div class="checkout-feilds">
-          <a href="/checkout" class="btn button">Checkout</a>
+          <a href="/checkout" id="checkoutbutton" class="btn button disabled">Checkout</a>
         </div>
        </div>
       </div>
@@ -459,8 +459,9 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
         });
      });
      
-     if ($('.cup-size-container:not(.disabled)').length > 0) { var addClass11 = true; } else { var addClass11 = false; }
-     if (addClass11 = true) { $('.cup-size-container').parents('.container-set').hide().next().show(); }
+     if ($('.cup-size-container:not(.disabled.outofstock)').length == 0) { var addClass11 = true; } else { var addClass11 = false; }
+     if (addClass11) { $('.cup-size-container').first().parents('.container-set').hide().next('.container-set').show(); }
+     
      var valvariantbackssize = $(this).find(':selected').attr('data-backssize');
      var variantbackssize = $('.variant-backs-size');
      $('option', variantbackssize).filter(function(){
@@ -528,6 +529,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
           beforeSend: function(){
             $('.progress').html('<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">Adding Product to Cart</div>');
             $('.progress-bar').animate({width: "20%"}, 100);
+            $('#checkoutbutton').addClass('disabled');
           },
           success: function(data) {
             setTimeout(function(){
@@ -535,6 +537,7 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
                 setTimeout(function(){
                   $('.progress-bar').text('Products Added to Cart');//.slideUp();
                   $('.progress-bar').animate({width: "100%"}, 100);
+                  $('#checkoutbutton').removeClass('disabled');
                 }, 3000);
             }, 1000);
             ajaxProduct(); console.log(tempId)
