@@ -25,16 +25,6 @@
                <p class="error_message" style="display:none;"></p>
              </div>
            </form>
-           {% comment %}
-           <form action="https://manage.kmail-lists.com/subscriptions/subscribe?a=LrAMeY&g=QLGgJB" id="email_signup" method="post" name="mc-embedded-subscribe-form" class="contact-form" target="_blank">
-             <input type="text" value="" name="FNAME" placeholder="{{ 'general.newsletter_form.subscriber_first_name' | t }}">
-             <input type="text" value="" name="LNAME" placeholder="{{ 'general.newsletter_form.subscriber_last_name' | t }}">
-             <input type="email" value="" name="EMAIL" class="transparent-field" placeholder="email address">
-             <button type='submit' name="subscribe" class="btn newsletter-button">{{ 'general.newsletter_form.submit' | t }}</button>
-           </form>
-           <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
-           <script type="text/javascript"> KlaviyoSubscribe.attachToForms('#email_signup', { hide_form_on_success: true }); </script>
-           {% endcomment %}
            {% else %}
            {% form 'customer' %}
            {% if form.posted_successfully? %}
@@ -302,13 +292,13 @@
             <span class="pink">0</span>
             <span class="green">!</span>
           </p>
-          <p class="bold top">we are working on expending our sizing. feel free to let us know,<br>what size you are looking for, send us an email at<br><a href="mailto:shop@thebralab.com" class="red">shop@thebralab.com</a></p>
+          <p class="bold top">We are working on expanding our sizing. Please let us know<br>what size you are looking for! Send us an email at<br><a href="mailto:shop@thebralab.com" class="red">shop@thebralab.com</a></p>
           <div class="content-center">
             <div class="section-space"></div>
             <div class="checkout-feilds">
               <p class="newsletter-text">
                 <a class="newsletter-link" href="#" id="newsletter-link" style="text-decoration:underline;"><span class="newsletter-span">Get on the list</span></a> to find out when we release new sizes and products.</p>
-                <a href="/pages/get-started" class="btn button">Get on the list</a>
+                <a href="#" class="btn button" id="open-newsletter">Get on the list</a>
             </div>
           </div>
        </div>
@@ -387,7 +377,6 @@
     <section class="section question" id="section-5" style="display: none;">
      <div class="container-set">
       <div class="mbottom space"></div>
-      
       <div class="middle-content">
       <p class="main-title">
           <span class="pink">h</span>
@@ -415,9 +404,15 @@
     </div>
   </div>
 </div>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600,800&display=swap" rel="stylesheet">
-{{ 'codehouse.css' | asset_url | stylesheet_tag }}
-{{ 'codehouse.js' | asset_url | script_tag }}
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+<script type="text/javascript">
+var scroll = new SmoothScroll('a[href*="#"]', {
+    speed: 800,
+    speedAsDuration: true,
+    offset: 100,
+    updateURL: false
+});
+</script>
 {% schema %}
   {
     "name": "Section Get Started",
