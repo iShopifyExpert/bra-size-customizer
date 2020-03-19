@@ -270,7 +270,7 @@
       </div>
       <div class="fields-set second-row center">
         <div class="color-content flex" id="selectcolor">
-          <a href="#" class="color-selector black selected-border" data-color="Black"></a>
+          <a href="#" class="color-selector black" data-color="Black"></a>
       	  <a href="#" class="color-selector skin" data-color="Beige"></a>
         </div>
       </div>
@@ -454,8 +454,18 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
         });
      });
      
-     if ($('.cup-size-container:not(.disabled.outofstock)').length == 0) { var addClass11 = true; } else { var addClass11 = false; }
-     if (addClass11) { $('.cup-size-container').first().parents('.container-set').hide().next('.container-set').show(); }
+     if($('.cup-size-container:not(.disabled.outofstock)').length==0){
+         $('.cup-size-container').first().parents('.container-set').hide().next('.container-set').show()
+     } else {
+        $('.cup-size-container:not(.outofstock)').addClass('disabled');
+        if($('.cup-size-container[data-color=Black]:not(.outofstock)').length == 0) {
+           $('.cup-size-container[data-color=Beige]:not(.outofstock)').removeClass('disabled');
+           $('.color-selector.skin').addClass('selected-border')
+        } else {
+           $('.cup-size-container[data-color=Black]:not(.outofstock)').removeClass('disabled');
+           $('.color-selector.black').addClass('selected-border');
+        }
+     }
      
      var valvariantbackssize = $(this).find(':selected').attr('data-backssize');
      var variantbackssize = $('.variant-backs-size');
@@ -479,8 +489,6 @@ html{padding-bottom: 0 !important;}.content {padding: 50px 0px 0px 0px !importan
      $(this).addClass('selected-outline').find('select').attr('name', 'id');
      return false;
    });
-   $('.cup-size-container:not(.outofstock)').addClass('disabled');
-   $('.cup-size-container[data-color=Black]:not(.outofstock)').removeClass('disabled');
    $(document).on('click', '#selectcolor a', function(e) {
      $('#selectcolor a').removeClass('selected-border');
      $('.cup-size-container:not(.outofstock)').addClass('disabled').removeClass('selected-outline');
